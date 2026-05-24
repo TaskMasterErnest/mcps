@@ -2,6 +2,13 @@ from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("add_integers")
 
+# defining the MCPError class
+class MCPError(Exception):
+    def __init__(self, code: int, message: str):
+        self.code = code
+        self.message = message
+        super().__init__(f"[{code}] {message}")
+
 # creating a tool (from a method)
 @mcp.tool() # a decorator to tell the MCP to expose this to others can use.
 def add(a: int, b: int) -> int:
@@ -12,11 +19,30 @@ def add(a: int, b: int) -> int:
         a: First integer
         b: Second integer
 
-    Returns:
+    Returns:git push -u origin main
         The sum of a and b.
     '''
 
     return a + b
+
+
+# defining a divide tool to the MCP
+@mcp.tool()
+def divide(a: int, b: int) -> int:
+    '''
+    Divide an integer by another and return the quotient
+
+    Args:
+        a: The numerator
+        b: The denominator
+
+    Returns:
+        The result of the division.
+    '''
+    if b == 0:
+        return MCPError(code=400, message="Division by zero is not allowed!")
+
+    return a / b
 
 
 if __name__ == "__main__":

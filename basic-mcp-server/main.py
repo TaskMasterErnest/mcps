@@ -1,4 +1,5 @@
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP, Context
+import time
 
 mcp = FastMCP("add_integers")
 
@@ -28,7 +29,7 @@ def add(a: int, b: int) -> int:
 
 # defining a divide tool to the MCP
 @mcp.tool()
-def divide(a: int, b: int) -> int:
+def divide(a: int, b: int) -> float:
     '''
     Divide an integer by another and return the quotient
 
@@ -43,6 +44,16 @@ def divide(a: int, b: int) -> int:
         return MCPError(code=400, message="Division by zero is not allowed!")
 
     return a / b
+
+@mcp.tool()
+def long_process(steps: int):
+    """
+    Simulates a long-running process.
+    """
+    for i in range(steps):
+        print(f"Processing step {i + 1} of {steps}")
+        time.sleep(0.1)
+    return "Process complete!"
 
 
 if __name__ == "__main__":

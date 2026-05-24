@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP, Context
 import time
+import logging
 
 mcp = FastMCP("add_integers")
 
@@ -10,9 +11,20 @@ class MCPError(Exception):
         self.message = message
         super().__init__(f"[{code}] {message}")
 
+
+# defining how the logger should work
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    filename='./mcp_server.log',
+    filemode='a',
+    force=True
+)
+
 # creating a tool (from a method)
 @mcp.tool() # a decorator to tell the MCP to expose this to others can use.
 def add(a: int, b: int) -> int:
+
     '''
     Add two integers and return the sum
 
@@ -20,11 +32,13 @@ def add(a: int, b: int) -> int:
         a: First integer
         b: Second integer
 
-    Returns:git push -u origin main
+    Returns:
         The sum of a and b.
     '''
-
-    return a + b
+    logging.info(f"Adding {a} and {b}")
+    result = a + b
+    logging.info(f"The result is {result}.")
+    return result
 
 
 # defining a divide tool to the MCP
